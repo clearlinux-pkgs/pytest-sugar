@@ -4,7 +4,7 @@
 #
 Name     : pytest-sugar
 Version  : 0.9.2
-Release  : 7
+Release  : 8
 URL      : https://files.pythonhosted.org/packages/55/59/f02f78d1c80f7e03e23177f60624c8106d4f23d124c921df103f65692464/pytest-sugar-0.9.2.tar.gz
 Source0  : https://files.pythonhosted.org/packages/55/59/f02f78d1c80f7e03e23177f60624c8106d4f23d124c921df103f65692464/pytest-sugar-0.9.2.tar.gz
 Summary  : pytest-sugar is a plugin for pytest that changes the default look and feel of pytest (e.g. progressbar, show tests that fail instantly).
@@ -27,7 +27,44 @@ BuildRequires : virtualenv
 
 %description
 # pytest-sugar
+
 [![](https://travis-ci.org/Frozenball/pytest-sugar.svg?branch=master)](https://travis-ci.org/Frozenball/pytest-sugar) ![](https://img.shields.io/pypi/v/pytest-sugar.svg)
+
+pytest-sugar is a plugin for [py.test](http://pytest.org) that shows
+failures and errors instantly and shows a progress bar.
+
+![](http://pivotfinland.com/pytest-sugar/img/video.gif)
+
+## Requirements
+
+You will need the following prerequisites in order to use pytest-sugar:
+
+- Python 2.7, 3.4 or newer
+- pytest 2.9.0 or newer
+- pytest-xdist 1.14 or above if you want the progress bar to work while running
+  tests in parallel
+
+## Installation
+
+To install pytest-sugar:
+
+    $ pip install pytest-sugar
+
+Then run your tests with:
+
+    $ py.test
+
+If you would like more detailed output (one test per line), then you may use the verbose option:
+
+    $ py.test --verbose
+
+If you would like to run tests without pytest-sugar, use:
+
+    $ py.test -p no:sugar
+
+## Running on Windows
+
+If you are seeing gibberish, you might want to try changing charset and fonts. See [this comment]( https://github.com/Frozenball/pytest-sugar/pull/49#issuecomment-146567670) for more details.
 
 %package license
 Summary: license components for the pytest-sugar package.
@@ -50,6 +87,7 @@ python components for the pytest-sugar package.
 Summary: python3 components for the pytest-sugar package.
 Group: Default
 Requires: python3-core
+Provides: pypi(pytest-sugar)
 
 %description python3
 python3 components for the pytest-sugar package.
@@ -57,19 +95,28 @@ python3 components for the pytest-sugar package.
 
 %prep
 %setup -q -n pytest-sugar-0.9.2
+cd %{_builddir}/pytest-sugar-0.9.2
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-export LANG=C
-export SOURCE_DATE_EPOCH=1541732902
+export LANG=C.UTF-8
+export SOURCE_DATE_EPOCH=1583210849
+# -Werror is for werrorists
+export GCC_IGNORE_WERROR=1
+export CFLAGS="$CFLAGS -fno-lto "
+export FCFLAGS="$CFLAGS -fno-lto "
+export FFLAGS="$CFLAGS -fno-lto "
+export CXXFLAGS="$CXXFLAGS -fno-lto "
+export MAKEFLAGS=%{?_smp_mflags}
 python3 setup.py build
 
 %install
+export MAKEFLAGS=%{?_smp_mflags}
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/pytest-sugar
-cp LICENSE %{buildroot}/usr/share/package-licenses/pytest-sugar/LICENSE
+cp %{_builddir}/pytest-sugar-0.9.2/LICENSE %{buildroot}/usr/share/package-licenses/pytest-sugar/ddb1f9409837a9415697b56693032fc8dd25d287
 python3 -tt setup.py build  install --root=%{buildroot}
 echo ----[ mark ]----
 cat %{buildroot}/usr/lib/python3*/site-packages/*/requires.txt || :
@@ -80,7 +127,7 @@ echo ----[ mark ]----
 
 %files license
 %defattr(0644,root,root,0755)
-/usr/share/package-licenses/pytest-sugar/LICENSE
+/usr/share/package-licenses/pytest-sugar/ddb1f9409837a9415697b56693032fc8dd25d287
 
 %files python
 %defattr(-,root,root,-)
