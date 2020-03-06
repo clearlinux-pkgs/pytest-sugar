@@ -4,7 +4,7 @@
 #
 Name     : pytest-sugar
 Version  : 0.9.2
-Release  : 8
+Release  : 9
 URL      : https://files.pythonhosted.org/packages/55/59/f02f78d1c80f7e03e23177f60624c8106d4f23d124c921df103f65692464/pytest-sugar-0.9.2.tar.gz
 Source0  : https://files.pythonhosted.org/packages/55/59/f02f78d1c80f7e03e23177f60624c8106d4f23d124c921df103f65692464/pytest-sugar-0.9.2.tar.gz
 Summary  : pytest-sugar is a plugin for pytest that changes the default look and feel of pytest (e.g. progressbar, show tests that fail instantly).
@@ -27,44 +27,7 @@ BuildRequires : virtualenv
 
 %description
 # pytest-sugar
-
 [![](https://travis-ci.org/Frozenball/pytest-sugar.svg?branch=master)](https://travis-ci.org/Frozenball/pytest-sugar) ![](https://img.shields.io/pypi/v/pytest-sugar.svg)
-
-pytest-sugar is a plugin for [py.test](http://pytest.org) that shows
-failures and errors instantly and shows a progress bar.
-
-![](http://pivotfinland.com/pytest-sugar/img/video.gif)
-
-## Requirements
-
-You will need the following prerequisites in order to use pytest-sugar:
-
-- Python 2.7, 3.4 or newer
-- pytest 2.9.0 or newer
-- pytest-xdist 1.14 or above if you want the progress bar to work while running
-  tests in parallel
-
-## Installation
-
-To install pytest-sugar:
-
-    $ pip install pytest-sugar
-
-Then run your tests with:
-
-    $ py.test
-
-If you would like more detailed output (one test per line), then you may use the verbose option:
-
-    $ py.test --verbose
-
-If you would like to run tests without pytest-sugar, use:
-
-    $ py.test -p no:sugar
-
-## Running on Windows
-
-If you are seeing gibberish, you might want to try changing charset and fonts. See [this comment]( https://github.com/Frozenball/pytest-sugar/pull/49#issuecomment-146567670) for more details.
 
 %package license
 Summary: license components for the pytest-sugar package.
@@ -87,7 +50,10 @@ python components for the pytest-sugar package.
 Summary: python3 components for the pytest-sugar package.
 Group: Default
 Requires: python3-core
-Provides: pypi(pytest-sugar)
+Provides: pypi(pytest_sugar)
+Requires: pypi(packaging)
+Requires: pypi(pytest)
+Requires: pypi(termcolor)
 
 %description python3
 python3 components for the pytest-sugar package.
@@ -102,8 +68,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1583210849
-# -Werror is for werrorists
+export SOURCE_DATE_EPOCH=1583530152
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fno-lto "
 export FCFLAGS="$CFLAGS -fno-lto "
